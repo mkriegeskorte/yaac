@@ -18,47 +18,47 @@ class Client
     /**
      * Live url
      */
-    const DIRECTORY_LIVE = 'https://acme-v02.api.letsencrypt.org/directory';
+    public const DIRECTORY_LIVE = 'https://acme-v02.api.letsencrypt.org/directory';
 
     /**
      * Staging url
      */
-    const DIRECTORY_STAGING = 'https://acme-staging-v02.api.letsencrypt.org/directory';
+    public const DIRECTORY_STAGING = 'https://acme-staging-v02.api.letsencrypt.org/directory';
 
     /**
      * Flag for production
      */
-    const MODE_LIVE = 'live';
+    public const MODE_LIVE = 'live';
 
     /**
      * Flag for staging
      */
-    const MODE_STAGING = 'staging';
+    public const MODE_STAGING = 'staging';
 
     /**
      * New account directory
      */
-    const DIRECTORY_NEW_ACCOUNT = 'newAccount';
+    public const DIRECTORY_NEW_ACCOUNT = 'newAccount';
 
     /**
      * Nonce directory
      */
-    const DIRECTORY_NEW_NONCE = 'newNonce';
+    public const DIRECTORY_NEW_NONCE = 'newNonce';
 
     /**
      * Order certificate directory
      */
-    const DIRECTORY_NEW_ORDER = 'newOrder';
+    public const DIRECTORY_NEW_ORDER = 'newOrder';
 
     /**
      * Http validation
      */
-    const VALIDATION_HTTP = 'http-01';
+    public const VALIDATION_HTTP = 'http-01';
 
     /**
      * DNS validation
      */
-    const VALIDATION_DNS = 'dns-01';
+    public const VALIDATION_DNS = 'dns-01';
 
     /**
      * @var string
@@ -359,7 +359,7 @@ class Client
         $data = json_decode((string)$response->getBody(), true);
         $accountURL = $response->getHeaderLine('Location');
         $date = (new \DateTime())->setTimestamp(strtotime($data['createdAt']));
-        return new Account($data['contact'], $date, ($data['status'] == 'valid'), $accountURL);
+        return new Account($date, ($data['status'] == 'valid'), $accountURL);
     }
 
     /**
@@ -371,8 +371,9 @@ class Client
         if ($this->httpClient === null) {
             $config = [
                 'base_uri' => (
-                ($this->getOption('mode', self::MODE_LIVE) == self::MODE_LIVE) ?
-                    self::DIRECTORY_LIVE : self::DIRECTORY_STAGING),
+                    ($this->getOption('mode', self::MODE_LIVE) == self::MODE_LIVE) ?
+                    self::DIRECTORY_LIVE : self::DIRECTORY_STAGING
+                ),
             ];
             if ($this->getOption('source_ip', false) !== false) {
                 $config['curl.options']['CURLOPT_INTERFACE'] = $this->getOption('source_ip');
